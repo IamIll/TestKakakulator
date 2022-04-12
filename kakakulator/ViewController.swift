@@ -93,8 +93,17 @@ class ViewController: UIViewController {
     var numberInterField: Double = 0
     
     @IBAction func digitsNumber(_ sender: UIButton) {
-        numberTextField.text! += String(sender.tag)
-        numberInterField = Double(numberTextField.text!)!
+        if resultValue == "" {
+            numberTextField.text! += String(sender.tag)
+        } else {
+            resultValue = nullingTextField
+            numberTextField.text = nullingTextField
+            numberTextField.text! += String(sender.tag)
+            return
+        }
+//        numberTextField.text! += String(sender.tag)
+        
+//        numberInterField = Double(numberTextField.text!)!
     }
     
     override func viewDidLoad() {
