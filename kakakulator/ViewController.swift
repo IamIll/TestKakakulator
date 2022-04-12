@@ -13,71 +13,76 @@ class ViewController: UIViewController {
     var nullingTextField: String = ""
     var nextValue: Double = 0
     var endValue: Double = 0
-    var markRecognition = 0
+    var resultValue: String = ""
+    enum ArithmeticSigns {
+          case multiply
+          case minus
+          case plus
+    }
+    func computation (acceptedValue: String, sings: ArithmeticSigns) -> String {
+        switch sings {
+        case .multiply:
+            if endValue == 0 {
+                initialValue = Double(numberTextField.text!)!
+                endValue = initialValue
+                resultValue = nullingTextField
+            } else {
+                initialValue = Double(numberTextField.text!)!
+                endValue *= initialValue
+                resultValue = String(endValue)
+                endValue = 0
+            }
+        case .minus:
+            if endValue == 0 {
+                initialValue = Double(numberTextField.text!)!
+                endValue = initialValue
+                resultValue = nullingTextField
+            } else {
+                initialValue = Double(numberTextField.text!)!
+                endValue = endValue - initialValue
+                resultValue = String(endValue)
+                endValue = 0
+            }
+        case .plus:
+            if endValue == 0 {
+                initialValue = Double(numberTextField.text!)!
+                endValue = initialValue
+                resultValue = nullingTextField
+            } else {
+                initialValue = Double(numberTextField.text!)!
+                endValue += initialValue
+                resultValue = String(endValue)
+                endValue = 0
+            }
+        }
+            return String(resultValue)
+    }
+    var markRecognition = ArithmeticSigns.plus
     
     @IBOutlet weak var numberTextField: UITextField!
     
     @IBAction func multiplication(_ sender: UIButton) {
-        markRecognition = 10
-        if endValue == 0 {
-            initialValue = Double(numberTextField.text!)!
-            endValue = initialValue
-            numberTextField.text = String(endValue)
-            numberTextField.text = nullingTextField
-        } else {
-            initialValue = Double(numberTextField.text!)!
-            endValue *= initialValue
-            numberTextField.text = String(endValue)
-        }
-            
-            
-//        nextValue = Double(numberTextField.text!)!
-//        endValue = initialValue * nextValue
-//        numberTextField.text = String(nextValue)
-        
-        
+        numberTextField.text = String(computation(acceptedValue: numberTextField.text! ,
+                                                  sings: .multiply))
+        markRecognition = .multiply
     }
     @IBAction func subtraction(_ sender: UIButton) {
-        markRecognition = 11
-        if endValue == 0 {
-            initialValue = Double(numberTextField.text!)!
-            endValue = initialValue
-//            numberTextField.text = String(endValue)
-            numberTextField.text = nullingTextField
-        } else {
-            initialValue = Double(numberTextField.text!)!
-            endValue = endValue - initialValue
-            numberTextField.text = String(endValue)
-        }
-       
+        numberTextField.text = String(computation(acceptedValue: numberTextField.text! ,
+                                                  sings: .minus))
+        markRecognition = .minus
     }
     @IBAction func addition(_ sender: UIButton) {
-        markRecognition = 12
-        if endValue == 0 {
-            initialValue = Double(numberTextField.text!)!
-            endValue = initialValue
-            numberTextField.text = String(endValue)
-            numberTextField.text = nullingTextField
-        } else {
-            initialValue = Double(numberTextField.text!)!
-            endValue += initialValue
-            numberTextField.text = String(endValue)
-        }
+        numberTextField.text = String(computation(acceptedValue: numberTextField.text! ,
+                                                  sings: .plus))
+        markRecognition = .plus
     }
     @IBAction func equals(_ sender: UIButton) {
-        if markRecognition == 10 {
-            initialValue = Double(numberTextField.text!)!
-            endValue = endValue - initialValue
-            numberTextField.text = String(endValue)
-        } else if markRecognition == 11 {
-            initialValue = Double(numberTextField.text!)!
-            endValue = endValue - initialValue
-            numberTextField.text = String(endValue)
-            
-        } else if markRecognition == 12 {
-            initialValue = Double(numberTextField.text!)!
-            endValue += initialValue
-            numberTextField.text = String(endValue)
+        if markRecognition == .multiply {
+            numberTextField.text = String(computation(acceptedValue: numberTextField.text! , sings: .multiply))
+        } else if markRecognition == .minus {
+            numberTextField.text = String(computation(acceptedValue: numberTextField.text! , sings: .minus))
+        } else if markRecognition == .plus {
+            numberTextField.text = String(computation(acceptedValue: numberTextField.text! , sings: .plus))
         }
     }
     @IBAction func clear(_ sender: UIButton) {
@@ -88,15 +93,9 @@ class ViewController: UIViewController {
     var numberInterField: Double = 0
     
     @IBAction func digitsNumber(_ sender: UIButton) {
-        
         numberTextField.text! += String(sender.tag)
-        
-       numberInterField = Double(numberTextField.text!)!
+        numberInterField = Double(numberTextField.text!)!
     }
-    
-    
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
